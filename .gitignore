@@ -1,6 +1,7 @@
 .mypy_cache/
-.vscode
-venv
+.vscode/
+__pycache__/
+venv/
 
 # contains secrets, do not include in repo
 config.py
