@@ -12,3 +12,10 @@ ADMIN_ROLES: List[int] = []
 
 # IDs of channels to act in
 CHANNELS: List[int] = []
+
+# Time to wait before deleting response messages, in seconds (default: 15)
+DELETION_DELAY = 15
+
+# Message to respond with.
+# "@user" will be replaced with a mention of the user who sent the message.
+DELETION_RESPONSE = "@user: do not chat in this channel."

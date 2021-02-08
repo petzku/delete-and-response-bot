@@ -2,7 +2,11 @@
 
 import discord
 
-from config import TOKEN
+# secret config
+from config import TOKEN, ADMIN_ROLES, CHANNELS
+# non-secret config
+from config import DELETION_DELAY, DELETION_RESPONSE
+
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -13,8 +17,25 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
-        if message.content == 'ping':
-            await message.channel.send('pong')
+        # only act in specified channels
+        if message.channel.id not in CHANNELS:
+            return
+
+        # ignore server admins
+        for admin_role in ADMIN_ROLES:
+            if admin_role in message.author.roles:
+                return
+
+        # delete messages without attachments in moderated channels
+        # and give the user a slap on the wrist
+        if not message.attachments:
+            message.delete()
+            self.warn_and_delete(message.channel, message.author, DELETION_RESPONSE)
+
+    async def warn_and_delete(self, channel, user, response):
+        response = response.replace("@user", "<@{:d}>".format(user.id))
+        channel.send(response, delete_after=DELETION_DELAY)
+
 
 client = MyClient()
 client.run(TOKEN)
