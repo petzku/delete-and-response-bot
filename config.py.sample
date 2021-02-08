@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+""" Sample configuration file for the bot. """
+
+from typing import List
+
+# Bot token
+TOKEN = ""
+
+# IDs for admin roles, all messages will be ignored by the bot
+ADMIN_ROLES: List[int] = []
+
+# IDs of channels to act in
+CHANNELS: List[int] = []

@@ -1,3 +1,6 @@
 .mypy_cache/
 .vscode
 venv
+
+# contains secrets, do not include in repo
+config.py
