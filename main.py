@@ -29,12 +29,12 @@ class MyClient(discord.Client):
         # delete messages without attachments in moderated channels
         # and give the user a slap on the wrist
         if not message.attachments:
-            message.delete()
-            self.warn_and_delete(message.channel, message.author, DELETION_RESPONSE)
+            await message.delete()
+            await self.warn_and_delete(message.channel, message.author, DELETION_RESPONSE)
 
     async def warn_and_delete(self, channel, user, response):
         response = response.replace("@user", "<@{:d}>".format(user.id))
-        channel.send(response, delete_after=DELETION_DELAY)
+        await channel.send(response, delete_after=DELETION_DELAY)
 
 
 client = MyClient()
