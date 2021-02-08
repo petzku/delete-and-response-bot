@@ -22,8 +22,8 @@ class MyClient(discord.Client):
             return
 
         # ignore server admins
-        for admin_role in ADMIN_ROLES:
-            if admin_role in message.author.roles:
+        for role in message.author.roles:
+            if role.id in ADMIN_ROLES:
                 return
 
         # delete messages without attachments in moderated channels
