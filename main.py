@@ -38,5 +38,6 @@ class MyClient(discord.Client):
         await channel.send(response, delete_after=DELETION_DELAY)
 
 
-client = MyClient()
-client.run(TOKEN)
+if __name__ == "__main__":
+    client = MyClient()
+    client.run(TOKEN)
