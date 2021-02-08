@@ -33,6 +33,7 @@ class MyClient(discord.Client):
             await self.warn_and_delete(message.channel, message.author, DELETION_RESPONSE)
 
     async def warn_and_delete(self, channel, user, response):
+        print('Warning user {:s}: {:s}'.format(user.name, response))
         response = response.replace("@user", "<@{:d}>".format(user.id))
         await channel.send(response, delete_after=DELETION_DELAY)
 
