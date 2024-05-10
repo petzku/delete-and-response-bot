@@ -8,6 +8,10 @@ from config import TOKEN, ADMIN_ROLES, CHANNELS
 from config import DELETION_DELAY, DELETION_RESPONSE
 
 
+intents = discord.Intents.default()
+intents.message_content = True
+
+
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
@@ -39,5 +43,5 @@ class MyClient(discord.Client):
 
 
 if __name__ == "__main__":
-    client = MyClient()
+    client = MyClient(intents=intents)
     client.run(TOKEN)
