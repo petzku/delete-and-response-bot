@@ -2,20 +2,18 @@
 
 """ Sample configuration file for the bot. """
 
-from typing import List
-
 # Bot token
-TOKEN = ""
+TOKEN: str = ""
 
 # IDs for admin roles, all messages will be ignored by the bot
-ADMIN_ROLES: List[int] = []
+ADMIN_ROLES: list[int] = []
 
 # IDs of channels to act in
-CHANNELS: List[int] = []
+CHANNELS: list[int] = []
 
 # Time to wait before deleting response messages, in seconds (default: 15)
-DELETION_DELAY = 15
+DELETION_DELAY: int = 15
 
 # Message to respond with.
 # "@user" will be replaced with a mention of the user who sent the message.
-DELETION_RESPONSE = "@user: do not chat in this channel."
+DELETION_RESPONSE: str = "Do not chat in this channel."
