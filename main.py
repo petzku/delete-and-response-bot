@@ -1,22 +1,33 @@
 #!/usr/bin/env python3
 
 import discord
+import re
 
 # secret config
 from config import TOKEN, ADMIN_ROLES, CHANNELS
+
 # non-secret config
 from config import DELETION_DELAY, DELETION_RESPONSE
+
+
+LINK_REGEX = re.compile(
+    r"(\b(https?)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", re.IGNORECASE
+)
 
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 
+def _has_link(message: discord.Message) -> bool:
+    return LINK_REGEX.search(message.content) is not None
+
+
 class MyClient(discord.Client):
     async def on_ready(self):
-        print('Logged on as', self.user)
+        print("Logged on as", self.user)
 
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         # don't respond to ourselves
         if message.author == self.user:
             return
@@ -32,14 +43,15 @@ class MyClient(discord.Client):
 
         # delete messages without attachments in moderated channels
         # and give the user a slap on the wrist
-        if not message.attachments:
+        if not message.attachments and not _has_link(message):
+            await self.warn_and_delete(message, message.author, DELETION_RESPONSE)
             await message.delete()
-            await self.warn_and_delete(message.channel, message.author, DELETION_RESPONSE)
 
-    async def warn_and_delete(self, channel, user, response):
-        print('Warning user {:s}: {:s}'.format(user.name, response))
-        response = response.replace("@user", "<@{:d}>".format(user.id))
-        await channel.send(response, delete_after=DELETION_DELAY)
+    async def warn_and_delete(
+        self, target: discord.Message, user: discord.User, response: str
+    ):
+        print(f"Warning user {user.name} in {target.channel.name}: {response}")
+        await target.reply(response, delete_after=DELETION_DELAY)
 
 
 if __name__ == "__main__":
