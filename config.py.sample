@@ -11,9 +11,15 @@ ADMIN_ROLES: list[int] = []
 # IDs of channels to act in
 CHANNELS: list[int] = []
 
+# Logging channels. remove -> log IDs
+LOG_CHANNELS: dict[int, int] = {}
+
 # Time to wait before deleting response messages, in seconds (default: 15)
 DELETION_DELAY: int = 15
 
 # Message to respond with.
 # "@user" will be replaced with a mention of the user who sent the message.
 DELETION_RESPONSE: str = "Do not chat in this channel."
+
+# Log message
+LOG_MESSAGE: str = "Deleting message by {user} in {channel}"

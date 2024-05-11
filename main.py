@@ -4,10 +4,10 @@ import discord
 import re
 
 # secret config
-from config import TOKEN, ADMIN_ROLES, CHANNELS
+from config import TOKEN, ADMIN_ROLES, CHANNELS, LOG_CHANNELS
 
 # non-secret config
-from config import DELETION_DELAY, DELETION_RESPONSE
+from config import DELETION_DELAY, DELETION_RESPONSE, LOG_MESSAGE
 
 
 LINK_REGEX = re.compile(
@@ -46,6 +46,20 @@ class MyClient(discord.Client):
         if not message.attachments and not _has_link(message):
             await self.warn_and_delete(message, message.author, DELETION_RESPONSE)
             await message.delete()
+            if message.channel.id in LOG_CHANNELS:
+                tgt = message.guild.get_channel(LOG_CHANNELS[message.channel.id])
+                log_embed = discord.Embed()
+                log_embed.set_author(
+                    name=message.author.name, icon_url=message.author.avatar.url
+                )
+                log_embed.add_field(name="Message", value=message.content)
+                await tgt.send(
+                    LOG_MESSAGE.format(
+                        user=f"<@{message.author.id}>",
+                        channel=f"<#{message.channel.id}>",
+                    ),
+                    embed=log_embed,
+                )
 
     async def warn_and_delete(
         self, target: discord.Message, user: discord.User, response: str
