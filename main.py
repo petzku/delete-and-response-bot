@@ -52,7 +52,7 @@ class MyClient(discord.Client):
                 log_embed.set_author(
                     name=message.author.name, icon_url=message.author.avatar.url
                 )
-                log_embed.add_field(name="Message", value=message.content)
+                log_embed.add_field(name="Message", value=message.content[:1024])
                 await tgt.send(
                     LOG_MESSAGE.format(
                         user=f"<@{message.author.id}>",
